@@ -1,0 +1,22 @@
+# Ignore environment files
+.env
+
+# Ignore Python virtual environment (if you use venv)
+.venv/
+venv/
+
+# Ignore CDK outputs
+cdk.out/
+
+# Ignore Python cache files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Ignore IDE/editor config files
+.vscode/
+.idea/
+
+# Ignore Mac system files
+.DS_Store
