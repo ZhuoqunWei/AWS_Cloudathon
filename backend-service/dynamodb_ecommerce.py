@@ -217,17 +217,11 @@ class EcommerceDynamoDB:
                             {'AttributeName': 'price', 'KeyType': 'RANGE'}
                         ],
                         'Projection': {'ProjectionType': 'ALL'},
-                        'ProvisionedThroughput': {
-                            'ReadCapacityUnits': 5,
-                            'WriteCapacityUnits': 5
-                        }
+                        
                     }
                 ],
-                BillingMode='PROVISIONED',
-                ProvisionedThroughput={
-                    'ReadCapacityUnits': 5,
-                    'WriteCapacityUnits': 5
-                }
+                BillingMode='PAY_PER_REQUEST',
+                
             )
             print("Waiting for Products table to be created...")
             self._wait_for_table('Products')
@@ -273,20 +267,28 @@ class EcommerceDynamoDB:
                             {'AttributeName': 'created_at', 'KeyType': 'RANGE'}
                         ],
                         'Projection': {'ProjectionType': 'ALL'},
-                        'ProvisionedThroughput': {
-                            'ReadCapacityUnits': 5,
-                            'WriteCapacityUnits': 5
-                        }
+                        
                     }
                 ],
-                BillingMode='PROVISIONED',
-                ProvisionedThroughput={
-                    'ReadCapacityUnits': 5,
-                    'WriteCapacityUnits': 5
-                }
+                BillingMode='PAY_PER_REQUEST',
+
             )
             print("Waiting for NewOrders table to be created...")
             self._wait_for_table('NewOrders')
+            
+            # === newly added us-west-2 replication ===
+            print("Adding global replication to NewOrders table...")
+            self.client.update_table(
+            TableName='NewOrders',
+            ReplicaUpdates=[
+                {
+                    'Create': {
+                        'RegionName': 'us-west-2'
+                    }
+                }
+            ]
+        )
+        print("Replication to us-west-2 initiated for NewOrders")
             
         print("All tables created successfully!")
 
