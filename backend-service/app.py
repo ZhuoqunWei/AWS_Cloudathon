@@ -35,6 +35,8 @@ def user_add_product_to_new_order():
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
-# Run Flask application, listen on port 80 (to match ECS service)
+# Do not run Flask locally when deployed in AWS
 if __name__ == "__main__":
-    app.run(debug=True, host='0.0.0.0', port=80)
+    # Only run the application when locally for testing or debugging
+    # If you deploy it in ECS or EC2, Flask should be started by the container manager
+    pass

@@ -15,6 +15,31 @@ class EcommerceDynamoDB:
         """Initialize DynamoDB resource"""
         self.dynamodb = boto3.resource('dynamodb', region_name=region_name)
         self.client = boto3.client('dynamodb', region_name=region_name)
+
+    def user_view_product(self, product_id):
+        """Get product by ID"""
+        return self.get_product(product_id)
+
+    def get_product(self, product_id):
+        """Get product by ID from DynamoDB and print all related information"""
+        table = self.dynamodb.Table('Products')
+        try:
+            response = table.get_item(Key={'product_id': product_id})
+            product = response.get('Item')  # Fetch the product item if found
+            
+            # Print all related product information
+            if product:
+                print("Product Information:")
+                for key, value in product.items():
+                    print(f"{key}: {value}")
+            else:
+                print(f"Product with ID {product_id} not found.")
+            
+            return product
+        
+        except Exception as e:
+            print(f"Error fetching product: {e}")
+            return None
     
     # ========== PRODUCT OPERATIONS ==========
     
